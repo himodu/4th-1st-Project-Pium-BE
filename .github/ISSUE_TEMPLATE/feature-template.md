@@ -1,7 +1,7 @@
 ---
 name: Feature-template
 about: Feature 이슈를 위한 템플릿
-title: "[Feature]"
+title: "✨Feature - "
 labels: ''
 assignees: ''
 

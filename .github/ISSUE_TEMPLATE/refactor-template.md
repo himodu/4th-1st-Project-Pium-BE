@@ -1,7 +1,7 @@
 ---
 name: Refactor-template
 about: Refactor 이슈를 위한 템플릿
-title: ''
+title: "\U0001F3A8Refactor - "
 labels: ''
 assignees: ''
 

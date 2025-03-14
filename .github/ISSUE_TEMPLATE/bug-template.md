@@ -1,7 +1,7 @@
 ---
 name: Bug-template
 about: Bug 이슈를 위한 템플릿
-title: "[BUG]"
+title: "\U0001F41BBUG - "
 labels: ''
 assignees: ''
 
