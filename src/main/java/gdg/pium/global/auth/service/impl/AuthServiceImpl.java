@@ -3,10 +3,10 @@ package gdg.pium.global.auth.service.impl;
 import gdg.pium.global.auth.dto.request.AccountLoginRequestDto;
 import gdg.pium.global.auth.dto.response.AccountLoginResponseDto;
 import gdg.pium.global.auth.dto.response.TokenRefreshResponseDto;
-import gdg.pium.global.auth.exception.AuthException;
-import gdg.pium.global.auth.exception.AuthExceptionDetails;
 import gdg.pium.global.auth.repository.AuthRepository;
 import gdg.pium.global.auth.service.AuthService;
+import gdg.pium.global.exception.CommonException;
+import gdg.pium.global.exception.ErrorCode;
 import gdg.pium.global.security.CustomUserDetails;
 import gdg.pium.global.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
@@ -75,9 +75,9 @@ public class AuthServiceImpl implements AuthService {
 
         // 저장된 Refresh 토큰과 비교
         String savedRefreshToken = authRepository.findRefreshTokenByAccountId(accountId)
-            .orElseThrow(() -> new AuthException(AuthExceptionDetails.NOT_FOUND_REFRESH_TOKEN));
+            .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_END_POINT));
         if (!savedRefreshToken.equals(refreshToken)) {
-            throw new AuthException(AuthExceptionDetails.NOT_VALID_REFRESH_TOKEN);
+            throw new CommonException(ErrorCode.NOT_FOUND_END_POINT);
         }
 
         // 새로운 액세스 토큰 생성

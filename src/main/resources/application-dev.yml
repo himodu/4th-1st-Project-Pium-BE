@@ -1,7 +1,7 @@
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3307/mymoo?useLegacyDatetimeCode=false&serverTimezone=Asia/Seoul&cacheDefaultTimezone=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pium?useLegacyDatetimeCode=false&serverTimezone=Asia/Seoul&cacheDefaultTimezone=false
     username: root
     password: 1234
 
@@ -21,3 +21,12 @@ logging:
 
 jwt:
   secret: "DLbuFF+XhYWRCzk7QFmob8DDUosRZRfln8XGytbEGcAcmpcU/++KO3wBTuDG4g6k3p3LpMJxA2CUivG6YpkLzQ=="
+
+
+kakao:
+  client-id: "648fcdc9b3865f050600b4295810e763"
+  redirect-uri: "http://localhost:3000"
+
+  authorization-uri: "https://kauth.kakao.com/oauth/authorize"
+  token-uri: "https://kauth.kakao.com/oauth/token"
+  user-info-uri: "https://kapi.kakao.com/v2/user/me"
