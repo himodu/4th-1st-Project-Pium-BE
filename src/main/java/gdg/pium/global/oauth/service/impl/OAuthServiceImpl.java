@@ -59,7 +59,7 @@ public class OAuthServiceImpl implements OAuthService {
             .queryParam("client_id", kakaoClientId)
             .queryParam("redirect_uri", kakaoRedirectUri) // TODO - 배포 시 변경
             // https://developers.kakao.com/docs/latest/ko/kakaologin/utilize#scope-user
-            .queryParam("scope", "profile_nickname,profile_image,account_email")
+            .queryParam("scope", "profile_nickname,profile_image")
             .toUriString();
     }
 

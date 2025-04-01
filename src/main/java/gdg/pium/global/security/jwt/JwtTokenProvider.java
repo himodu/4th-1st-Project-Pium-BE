@@ -3,6 +3,7 @@ package gdg.pium.global.security.jwt;
 import gdg.pium.domain.account.entity.Account;
 import gdg.pium.global.security.CustomUserDetails;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
