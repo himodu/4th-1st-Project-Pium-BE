@@ -19,7 +19,22 @@ public class Post {
 
     private String content;
 
+    private float latitude;
+
+    private float longitude;
+
+    private int likes;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users user;
+
+    public void update(String title, String content) {
+        if (title != null && !title.isBlank()) {
+            this.title = title;
+        }
+        if (content != null && !content.isBlank()) {
+            this.content = content;
+        }
+    }
 }
