@@ -1,6 +1,6 @@
-package gdg.pium.global.oauth.service;
+package gdg.pium.global.auth.service;
 
-import gdg.pium.global.oauth.dto.response.KakaoLoginResponseDto;
+import gdg.pium.global.auth.dto.response.KakaoLoginResponseDto;
 
 public interface OAuthService {
 

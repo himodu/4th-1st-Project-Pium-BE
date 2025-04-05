@@ -53,7 +53,7 @@ public class AuthController {
         @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         // 현재 인증된 사용자 정보에서 userId 추출
-        Long userId = userDetails.getAccountId();
+        Long userId = userDetails.getUserId();
 
         // 로그아웃 처리
         authService.logout(userId);

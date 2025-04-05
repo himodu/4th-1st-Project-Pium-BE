@@ -1,8 +1,8 @@
-package gdg.pium.global.oauth.controller;
+package gdg.pium.global.auth.controller;
 
-import gdg.pium.global.oauth.dto.response.KakaoLoginResponseDto;
-import gdg.pium.global.oauth.dto.response.KakaoLoginUrlResponseDto;
-import gdg.pium.global.oauth.service.OAuthService;
+import gdg.pium.global.auth.dto.response.KakaoLoginResponseDto;
+import gdg.pium.global.auth.dto.response.KakaoLoginUrlResponseDto;
+import gdg.pium.global.auth.service.OAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;

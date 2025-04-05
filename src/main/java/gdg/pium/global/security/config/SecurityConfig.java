@@ -1,7 +1,10 @@
-package gdg.pium.global.config;
+package gdg.pium.global.security.config;
 
 
-import gdg.pium.global.security.jwt.JwtAuthenticationFilter;
+import gdg.pium.global.security.filter.JwtAuthenticationFilter;
+import gdg.pium.global.security.filter.JwtExceptionFilter;
+import gdg.pium.global.security.handler.JwtAccessDeniedHandler;
+import gdg.pium.global.security.handler.JwtAuthEntryPoint;
 import gdg.pium.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
@@ -30,6 +33,9 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -48,6 +54,9 @@ public class SecurityConfig {
     public JwtAuthenticationFilter jwtAuthorizationFilter() {
         return new JwtAuthenticationFilter(jwtTokenProvider);
     }
+
+    @Bean
+    public JwtExceptionFilter jwtExceptionFilter() {return new JwtExceptionFilter();}
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -71,14 +80,24 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/token/refresh").permitAll()
                         .requestMatchers("/api/v1/oauth/**").permitAll()
                         .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/statistics/utilizations").permitAll()
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
         );
 
-        httpSecurity.addFilterBefore(
-                jwtAuthorizationFilter(),
-                UsernamePasswordAuthenticationFilter.class
-        );
+        httpSecurity
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling
+                                .authenticationEntryPoint(jwtAuthEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler)
+                )
+                .addFilterBefore(
+                    jwtAuthorizationFilter(),
+                    LogoutFilter.class
+                )
+                .addFilterBefore(
+                        jwtExceptionFilter(),
+                        JwtAuthenticationFilter.class
+                )
+        ;
 
         return httpSecurity.build();
     }

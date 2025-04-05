@@ -1,4 +1,4 @@
-package gdg.pium.domain.account.entity;
+package gdg.pium.domain.user.entity;
 
 import gdg.pium.global.enums.UserRole;
 import jakarta.persistence.*;
@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "accounts")
+@Table(name = "users")
 @Entity
-public class Account {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +38,7 @@ public class Account {
     private String profileImageUrl;
 
     @Builder
-    public Account(String email, String password, String nickname, UserRole role, String profileImageUrl) {
+    public User(String email, String password, String nickname, UserRole role, String profileImageUrl) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;

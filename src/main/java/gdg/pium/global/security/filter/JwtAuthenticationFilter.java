@@ -1,6 +1,7 @@
-package gdg.pium.global.security.jwt;
+package gdg.pium.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gdg.pium.global.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -39,27 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String jwt = authorizationHeader.substring(7); // 토큰 부분만 추출
-        try {
-            Claims claims = jwtTokenProvider.getClaimsFromToken(jwt);
-            // Authentication 객체를 등록
-            SecurityContextHolder.getContext().setAuthentication(
-                jwtTokenProvider.getAuthenticationFromClaims(claims)
-            );
-        } catch (JwtException e) {
-            log.error("JWT 토큰 오류: {}", e.getMessage());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
 
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-            errorResponse.put("message", e.getMessage());
+        Claims claims = jwtTokenProvider.getClaimsFromToken(jwt);
+        // Authentication 객체를 등록
+        SecurityContextHolder.getContext().setAuthentication(jwtTokenProvider.getAuthenticationFromClaims(claims)
+        );
 
-            String jsonResponse = mapper.writeValueAsString(errorResponse);
-            response.getWriter().write(jsonResponse);
-            return;
-        }
         filterChain.doFilter(request, response);
     }
 }

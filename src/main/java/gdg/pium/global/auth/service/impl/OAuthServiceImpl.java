@@ -1,13 +1,13 @@
-package gdg.pium.global.oauth.service.impl;
+package gdg.pium.global.auth.service.impl;
 
-import gdg.pium.domain.account.entity.Account;
-import gdg.pium.domain.account.repository.AccountRepository;
+import gdg.pium.domain.user.entity.User;
+import gdg.pium.domain.user.repository.UserRepository;
 import gdg.pium.global.auth.repository.AuthRepository;
 import gdg.pium.global.enums.UserRole;
-import gdg.pium.global.oauth.dto.kakao.KakaoTokenResponse;
-import gdg.pium.global.oauth.dto.kakao.KakaoUserInfo;
-import gdg.pium.global.oauth.dto.response.KakaoLoginResponseDto;
-import gdg.pium.global.oauth.service.OAuthService;
+import gdg.pium.global.auth.dto.kakao.KakaoTokenResponse;
+import gdg.pium.global.auth.dto.kakao.KakaoUserInfo;
+import gdg.pium.global.auth.dto.response.KakaoLoginResponseDto;
+import gdg.pium.global.auth.service.OAuthService;
 import gdg.pium.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class OAuthServiceImpl implements OAuthService {
     private String kakaoUserInfoUri;
 
     private final WebClient webClient;
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthRepository authRepository;
@@ -59,7 +59,7 @@ public class OAuthServiceImpl implements OAuthService {
             .queryParam("client_id", kakaoClientId)
             .queryParam("redirect_uri", kakaoRedirectUri) // TODO - 배포 시 변경
             // https://developers.kakao.com/docs/latest/ko/kakaologin/utilize#scope-user
-            .queryParam("scope", "profile_nickname,profile_image")
+            .queryParam("scope", "profile_nickname,profile_image,account_email")
             .toUriString();
     }
 
@@ -75,16 +75,16 @@ public class OAuthServiceImpl implements OAuthService {
 
         // 신규 유저인지 확인
         String kakaoUserEmail = userInfo.id() + "_" + userInfo.kakaoAccount().email();
-        Optional<Account> accountOpt = accountRepository.findByEmail(kakaoUserEmail);
+        Optional<User> accountOpt = userRepository.findByEmail(kakaoUserEmail);
 
         if (accountOpt.isEmpty()) {
             // 신규 유저라면 계정 생성
-            Account newAccount = createNewAccount(userInfo);
-            accountRepository.save(newAccount);
+            User newAccount = createNewAccount(userInfo);
+            userRepository.save(newAccount);
 
             return handleLogin(newAccount, true);
         } else {
-            Account existingAccount = accountOpt.get();
+            User existingAccount = accountOpt.get();
             return handleLogin(existingAccount, false);
         }
     }
@@ -122,7 +122,7 @@ public class OAuthServiceImpl implements OAuthService {
             .block(); // 동기 요청
     }
 
-    private Account createNewAccount(KakaoUserInfo userInfo) {
+    private User createNewAccount(KakaoUserInfo userInfo) {
         KakaoUserInfo.KakaoAccount kakaoAccount = Objects.requireNonNull(
             userInfo.kakaoAccount(),
             "KakaoAccount cannot be null"
@@ -143,7 +143,7 @@ public class OAuthServiceImpl implements OAuthService {
         if (profileImageUrl == null){
             profileImageUrl = getDefaultImage();
         }
-        return Account.builder()
+        return User.builder()
             .email(kakaoUserEmail)
             .password(password)
             .nickname(nickname)
@@ -152,7 +152,7 @@ public class OAuthServiceImpl implements OAuthService {
             .build();
     }
 
-    private KakaoLoginResponseDto handleLogin(Account account, boolean isNewUser) {
+    private KakaoLoginResponseDto handleLogin(User account, boolean isNewUser) {
         // 토큰 생성
         String accessToken = jwtTokenProvider.createAccessTokenWithAccountEntity(account);
         String refreshToken = jwtTokenProvider.createRefreshTokenWithAccountEntity(account);

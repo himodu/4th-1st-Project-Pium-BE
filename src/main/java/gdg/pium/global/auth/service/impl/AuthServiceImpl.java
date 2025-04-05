@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Refresh 토큰 저장
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        Long accountId = customUserDetails.getAccountId();
+        Long accountId = customUserDetails.getUserId();
         authRepository.saveRefreshToken(
             accountId,
             refreshToken,

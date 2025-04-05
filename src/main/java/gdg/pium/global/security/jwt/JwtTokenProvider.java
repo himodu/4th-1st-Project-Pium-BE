@@ -1,11 +1,14 @@
 package gdg.pium.global.security.jwt;
 
-import gdg.pium.domain.account.entity.Account;
+import gdg.pium.domain.user.entity.User;
+import gdg.pium.global.exception.CommonException;
+import gdg.pium.global.exception.ErrorCode;
 import gdg.pium.global.security.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import io.lettuce.core.ScriptOutputType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +40,7 @@ public class JwtTokenProvider {
     public String createAccessToken(Authentication authentication) {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         return createToken(
-            customUserDetails.getAccountId(),
+            customUserDetails.getUserId(),
             customUserDetails.getAuthorities(),
             ACCESS_TOKEN_VALIDITY
         );
@@ -56,7 +59,7 @@ public class JwtTokenProvider {
         );
     }
 
-    public String createAccessTokenWithAccountEntity(Account account) {
+    public String createAccessTokenWithAccountEntity(User account) {
         return createToken(
             account.getId(),
             Collections.singletonList(
@@ -69,13 +72,13 @@ public class JwtTokenProvider {
     public String createRefreshToken(Authentication authentication) {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         return createToken(
-            customUserDetails.getAccountId(),
+            customUserDetails.getUserId(),
             customUserDetails.getAuthorities(),
             REFRESH_TOKEN_VALIDITY
         );
     }
 
-    public String createRefreshTokenWithAccountEntity(Account account) {
+    public String createRefreshTokenWithAccountEntity(User account) {
         return createToken(
             account.getId(),
             Collections.singletonList(
@@ -112,15 +115,11 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
         } catch (ExpiredJwtException e) {
-            throw new JwtException("Expired JWT token", e);
-        } catch (UnsupportedJwtException e) {
-            throw new JwtException("Unsupported JWT token", e);
-        } catch (MalformedJwtException e) {
-            throw new JwtException("Invalid JWT token", e);
-        } catch (SignatureException e) {
-            throw new JwtException("Invalid JWT signature", e);
+            throw new CommonException(ErrorCode.TOKEN_EXPIRED);
         } catch (IllegalArgumentException e) {
-            throw new JwtException("JWT claims string is empty", e);
+            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+        } catch (Exception e) {
+            throw new CommonException(ErrorCode.INVALID_JWT_TOKEN_FORMAT);
         }
     }
 
@@ -128,9 +127,8 @@ public class JwtTokenProvider {
     public Authentication getAuthenticationFromClaims(Claims claims) {
         Long accountId = claims.get(USER_ID_KEY,Long.class);
         String authority = claims.get(AUTHORIZATION_KEY, String.class);
-
         UserDetails userDetails = CustomUserDetails.builder()
-            .accountId(accountId) // accountId만 이용
+            .userId(accountId) // accountId만 이용
             .email(null)
             .password(null)
             .authorities(

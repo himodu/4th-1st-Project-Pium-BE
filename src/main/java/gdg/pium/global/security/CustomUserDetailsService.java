@@ -1,7 +1,9 @@
 package gdg.pium.global.security;
 
-import gdg.pium.domain.account.entity.Account;
-import gdg.pium.domain.account.repository.AccountRepository;
+import gdg.pium.domain.user.entity.User;
+import gdg.pium.domain.user.repository.UserRepository;
+import gdg.pium.global.exception.CommonException;
+import gdg.pium.global.exception.ErrorCode;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,25 +15,24 @@ import java.util.Collections;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
-    public CustomUserDetailsService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        User user = userRepository.findByEmail(username)
+            .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
 
         return CustomUserDetails.builder()
-            .accountId(account.getId())
-            .email(account.getEmail())
-            .password(account.getPassword())
+            .userId(user.getId())
+            .email(user.getEmail())
             .authorities(
                 Collections.singletonList(
                     new SimpleGrantedAuthority(
-                        account.getRole().getAuthority()
+                        user.getRole().getAuthority()
                     )
                 )
             )

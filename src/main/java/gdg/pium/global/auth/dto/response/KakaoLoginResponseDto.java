@@ -1,10 +1,13 @@
-package gdg.pium.global.oauth.dto.response;
+package gdg.pium.global.auth.dto.response;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.NonNull;
 
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record KakaoLoginResponseDto(
     @NonNull Long accountId,
     @NonNull String userRole,
