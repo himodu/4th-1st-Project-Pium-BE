@@ -1,4 +1,4 @@
-package gdg.pium.user;
+package gdg.pium.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +8,8 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor
-public class Users {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

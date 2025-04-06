@@ -1,7 +1,7 @@
-package gdg.pium.post.controller.dto;
+package gdg.pium.domain.post.controller.dto;
 
-import gdg.pium.post.Post;
-import gdg.pium.user.Users;
+import gdg.pium.domain.post.Post;
+import gdg.pium.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,7 +19,7 @@ public class PostInfoResponse {
     private int like;
     private List<String> images;
 
-    public static PostInfoResponse from(Post post, Users user, List<String> images) {
+    public static PostInfoResponse from(Post post, User user, List<String> images) {
         return PostInfoResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())

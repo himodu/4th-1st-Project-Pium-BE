@@ -1,6 +1,6 @@
-package gdg.pium.image.controller;
+package gdg.pium.domain.image.controller;
 
-import gdg.pium.image.service.ImageService;
+import gdg.pium.domain.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

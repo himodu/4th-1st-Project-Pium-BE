@@ -1,6 +1,6 @@
-package gdg.pium.post;
+package gdg.pium.domain.post;
 
-import gdg.pium.user.Users;
+import gdg.pium.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,7 +27,7 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private User user;
 
     public void update(String title, String content) {
         if (title != null && !title.isBlank()) {

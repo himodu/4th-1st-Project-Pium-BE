@@ -1,7 +1,7 @@
-package gdg.pium.post.controller.dto;
+package gdg.pium.domain.post.controller.dto;
 
-import gdg.pium.post.Post;
-import gdg.pium.user.Users;
+import gdg.pium.domain.post.Post;
+import gdg.pium.domain.user.User;
 import lombok.Getter;
 
 @Getter
@@ -12,7 +12,7 @@ public class PostCreateRequest {
     private float latitude;
     private float longitude;
 
-    public Post toEntity(Users user) {
+    public Post toEntity(User user) {
         return Post.builder()
                 .title(title)
                 .content(content)

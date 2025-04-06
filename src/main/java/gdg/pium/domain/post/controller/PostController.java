@@ -1,10 +1,10 @@
-package gdg.pium.post.controller;
+package gdg.pium.domain.post.controller;
 
 import gdg.pium.global.dto.PagingResponse;
-import gdg.pium.post.controller.dto.PostCreateRequest;
-import gdg.pium.post.controller.dto.PostInfoResponse;
-import gdg.pium.post.controller.dto.PostUpdateRequest;
-import gdg.pium.post.service.PostService;
+import gdg.pium.domain.post.controller.dto.PostCreateRequest;
+import gdg.pium.domain.post.controller.dto.PostInfoResponse;
+import gdg.pium.domain.post.controller.dto.PostUpdateRequest;
+import gdg.pium.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

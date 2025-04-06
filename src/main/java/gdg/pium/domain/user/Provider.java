@@ -1,4 +1,4 @@
-package gdg.pium.user;
+package gdg.pium.domain.user;
 
 public enum Provider {
 

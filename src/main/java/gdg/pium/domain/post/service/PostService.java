@@ -1,22 +1,22 @@
-package gdg.pium.post.service;
+package gdg.pium.domain.post.service;
 
 import gdg.pium.global.dto.PagingResponse;
-import gdg.pium.image.Image;
-import gdg.pium.image.repository.ImageRepository;
-import gdg.pium.image.service.ImageService;
-import gdg.pium.post.Post;
-import gdg.pium.post.controller.dto.PostCreateRequest;
-import gdg.pium.post.controller.dto.PostInfoResponse;
-import gdg.pium.post.controller.dto.PostUpdateRequest;
-import gdg.pium.post.repository.PostRepository;
-import gdg.pium.user.Users;
-import gdg.pium.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import gdg.pium.domain.image.Image;
+import gdg.pium.domain.image.repository.ImageRepository;
+import gdg.pium.domain.image.service.ImageService;
+import gdg.pium.domain.post.Post;
+import gdg.pium.domain.post.controller.dto.PostCreateRequest;
+import gdg.pium.domain.post.controller.dto.PostInfoResponse;
+import gdg.pium.domain.post.controller.dto.PostUpdateRequest;
+import gdg.pium.domain.post.repository.PostRepository;
+import gdg.pium.domain.user.User;
+import gdg.pium.domain.user.repository.UserRepository;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +35,7 @@ public class PostService {
 
     @Transactional
     public void createPost(PostCreateRequest request, List<MultipartFile> images, Long userId) throws IOException {
-        Users user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("asdas"));
 
         Post post = request.toEntity(user);
@@ -47,9 +47,9 @@ public class PostService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PostInfoResponse getPostById(Long postId, Long userId) {
-        Users user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("asdas"));
 
         Post post = postRepository.findById(postId)
@@ -60,16 +60,16 @@ public class PostService {
         return PostInfoResponse.from(post, user, imageUrls);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PagingResponse<PostInfoResponse> getPosts(Pageable pageable, Long userId) {
-        Users user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("asdas"));
 
         Page<Post> postPage = postRepository.findAll(pageable);
 
         Page<PostInfoResponse> responsePage = postPage.map(post -> {
             // 게시글 작성자
-            Users writer = userRepository.findById(post.getUser().getId())
+            User writer = userRepository.findById(post.getUser().getId())
                     .orElseThrow(() -> new IllegalArgumentException("작성자를 찾을 수 없습니다."));
 
             // 이미지 URL 조회
