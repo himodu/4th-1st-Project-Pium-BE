@@ -1,17 +1,13 @@
-package gdg.pium.global.common.controller;
+package gdg.pium.domain.user.test.controller;
 
+import gdg.pium.domain.user.test.dto.TestResponse;
+import gdg.pium.domain.user.test.service.TestService;
 import gdg.pium.global.annotation.UserId;
-import gdg.pium.global.auth.dto.request.AccountLoginRequestDto;
-import gdg.pium.global.auth.dto.response.AccountLoginResponseDto;
 import gdg.pium.global.common.dto.ResponseDto;
-import gdg.pium.global.common.dto.TestResponse;
-import gdg.pium.global.common.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

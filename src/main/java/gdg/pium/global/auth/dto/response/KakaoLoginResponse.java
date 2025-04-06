@@ -8,7 +8,7 @@ import lombok.NonNull;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record KakaoLoginResponseDto(
+public record KakaoLoginResponse(
     @NonNull Long accountId,
     @NonNull String userRole,
     @NonNull String accessToken,

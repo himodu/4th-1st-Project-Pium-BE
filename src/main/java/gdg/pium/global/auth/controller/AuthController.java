@@ -1,10 +1,11 @@
 package gdg.pium.global.auth.controller;
 
-import gdg.pium.global.auth.dto.request.AccountLoginRequestDto;
-import gdg.pium.global.auth.dto.request.TokenRefreshRequestDto;
-import gdg.pium.global.auth.dto.response.AccountLoginResponseDto;
-import gdg.pium.global.auth.dto.response.TokenRefreshResponseDto;
+import gdg.pium.global.auth.dto.request.AccountLoginRequest;
+import gdg.pium.global.auth.dto.request.TokenRefreshRequest;
+import gdg.pium.global.auth.dto.response.AccountLoginResponse;
+import gdg.pium.global.auth.dto.response.TokenRefreshResponse;
 import gdg.pium.global.auth.service.AuthService;
+import gdg.pium.global.common.dto.ResponseDto;
 import gdg.pium.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,10 +34,10 @@ public class AuthController {
         }
     )
     @PostMapping("/login")
-    public ResponseEntity<AccountLoginResponseDto> login(
-        @Valid @RequestBody AccountLoginRequestDto loginRequestDto
+    public ResponseDto<AccountLoginResponse> login(
+        @Valid @RequestBody AccountLoginRequest loginRequestDto
     ) {
-        return ResponseEntity.ok(
+        return ResponseDto.ok(
             authService.login(loginRequestDto)
         );
     }
@@ -49,7 +50,7 @@ public class AuthController {
         }
     )
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(
+    public ResponseDto<Void> logout(
         @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         // 현재 인증된 사용자 정보에서 userId 추출
@@ -58,9 +59,7 @@ public class AuthController {
         // 로그아웃 처리
         authService.logout(userId);
 
-        return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .build();
+        return ResponseDto.noContent();
     }
 
     @Operation(
@@ -71,9 +70,9 @@ public class AuthController {
         }
     )
     @PostMapping("/token/refresh")
-    public ResponseEntity<TokenRefreshResponseDto> refreshToken(
-        @Valid @RequestBody TokenRefreshRequestDto tokenRefreshRequestDto
+    public ResponseDto<TokenRefreshResponse> refreshToken(
+        @Valid @RequestBody TokenRefreshRequest tokenRefreshRequest
     ) {
-        return ResponseEntity.ok(authService.getNewAccessToken(tokenRefreshRequestDto.refreshToken()));
+        return ResponseDto.ok(authService.getNewAccessToken(tokenRefreshRequest.refreshToken()));
     }
 }

@@ -1,8 +1,8 @@
-package gdg.pium.global.common.service;
+package gdg.pium.domain.user.test.service;
 
 import gdg.pium.domain.user.entity.User;
 import gdg.pium.domain.user.repository.UserRepository;
-import gdg.pium.global.common.dto.TestResponse;
+import gdg.pium.domain.user.test.dto.TestResponse;
 import gdg.pium.global.exception.CommonException;
 import gdg.pium.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
