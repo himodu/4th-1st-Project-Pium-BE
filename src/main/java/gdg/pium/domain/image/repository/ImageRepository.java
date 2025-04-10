@@ -1,6 +1,6 @@
 package gdg.pium.domain.image.repository;
 
-import gdg.pium.domain.image.Image;
+import gdg.pium.domain.image.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

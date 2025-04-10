@@ -1,17 +1,19 @@
 package gdg.pium.domain.post.service;
 
+import gdg.pium.domain.user.entity.User;
 import gdg.pium.global.dto.PagingResponse;
-import gdg.pium.domain.image.Image;
+import gdg.pium.domain.image.entity.Image;
 import gdg.pium.domain.image.repository.ImageRepository;
 import gdg.pium.domain.image.service.ImageService;
-import gdg.pium.domain.post.Post;
-import gdg.pium.domain.post.controller.dto.PostCreateRequest;
-import gdg.pium.domain.post.controller.dto.PostInfoResponse;
-import gdg.pium.domain.post.controller.dto.PostUpdateRequest;
+import gdg.pium.domain.post.entity.Post;
+import gdg.pium.domain.post.dto.request.PostCreateRequest;
+import gdg.pium.domain.post.dto.response.PostInfoResponse;
+import gdg.pium.domain.post.dto.request.PostUpdateRequest;
 import gdg.pium.domain.post.repository.PostRepository;
-import gdg.pium.domain.user.User;
 import gdg.pium.domain.user.repository.UserRepository;
 
+import gdg.pium.global.exception.CommonException;
+import gdg.pium.global.exception.ErrorCode;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,7 @@ public class PostService {
     @Transactional
     public void createPost(PostCreateRequest request, List<MultipartFile> images, Long userId) throws IOException {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("asdas"));
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
 
         Post post = request.toEntity(user);
         postRepository.save(post);
@@ -53,7 +55,7 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("asdas"));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_POST));
 
         List<String> imageUrls = imageRepository.findByPostId(postId);
 
@@ -63,14 +65,14 @@ public class PostService {
     @Transactional(readOnly = true)
     public PagingResponse<PostInfoResponse> getPosts(Pageable pageable, Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("asdas"));
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
 
         Page<Post> postPage = postRepository.findAll(pageable);
 
         Page<PostInfoResponse> responsePage = postPage.map(post -> {
             // 게시글 작성자
             User writer = userRepository.findById(post.getUser().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("작성자를 찾을 수 없습니다."));
+                    .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
 
             // 이미지 URL 조회
             List<String> imageUrls = imageRepository.findByPostId(post.getId());
@@ -85,10 +87,10 @@ public class PostService {
     @Transactional
     public void updatePost(Long postId, PostUpdateRequest request, List<MultipartFile> newImages, Long userId) throws IOException {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_POST));
 
         if (!post.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("게시글을 수정할 권한이 없습니다.");
+            throw new CommonException(ErrorCode.POST_EDIT_FORBIDDEN);
         }
 
         post.update(request.getTitle(), request.getContent());
@@ -124,11 +126,11 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_POST));
 
         // 작성자 검증
         if (!post.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+            throw new CommonException(ErrorCode.POST_EDIT_FORBIDDEN);
         }
 
         // 게시글에 연결된 이미지 S3, DB 삭제
@@ -139,6 +141,5 @@ public class PostService {
 
         imageRepository.deleteAll(images); // DB에서 이미지 삭제
         postRepository.delete(post); // 게시글 삭제
-
     }
 }

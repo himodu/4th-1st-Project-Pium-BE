@@ -1,7 +1,7 @@
-package gdg.pium.domain.post.controller.dto;
+package gdg.pium.domain.post.dto.request;
 
-import gdg.pium.domain.post.Post;
-import gdg.pium.domain.user.User;
+import gdg.pium.domain.post.entity.Post;
+import gdg.pium.domain.user.entity.User;
 import lombok.Getter;
 
 @Getter

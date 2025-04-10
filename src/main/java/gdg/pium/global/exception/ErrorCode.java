@@ -11,6 +11,7 @@ public enum ErrorCode {
     // Not Found Error
     NOT_FOUND_END_POINT(40400, HttpStatus.NOT_FOUND, "존재하지 않는 API 엔드포인트입니다."),
     NOT_FOUND_USER(40401, HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
+    NOT_FOUND_POST(40402, HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
 
     // Invalid Argument Error
     INVALID_HEADER_ERROR(40000, HttpStatus.BAD_REQUEST, "유효하지 않은 헤더입니다."),
@@ -22,6 +23,7 @@ public enum ErrorCode {
     ACCESS_DENIED(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
     TOKEN_EXPIRED(40301, HttpStatus.FORBIDDEN, "토큰이 만료되었습니다."),
     INVALID_JWT_TOKEN_FORMAT(40302, HttpStatus.FORBIDDEN, "토큰 형식이 맞지 않습니다. 올바른 토큰 형식 'Authorization' : 'Bearer {token}')"),
+    POST_EDIT_FORBIDDEN(40303, HttpStatus.FORBIDDEN, "게시물을 수정할 권한이 없습니다."),
 
     // Internal Server Error
     INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.")

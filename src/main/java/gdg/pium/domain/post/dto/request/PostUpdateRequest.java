@@ -1,4 +1,4 @@
-package gdg.pium.domain.post.controller.dto;
+package gdg.pium.domain.post.dto.request;
 
 import lombok.Getter;
 

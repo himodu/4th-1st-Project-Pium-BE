@@ -1,10 +1,15 @@
 package gdg.pium.domain.post.controller;
 
+import gdg.pium.global.annotation.UserId;
+import gdg.pium.global.common.dto.ResponseDto;
 import gdg.pium.global.dto.PagingResponse;
-import gdg.pium.domain.post.controller.dto.PostCreateRequest;
-import gdg.pium.domain.post.controller.dto.PostInfoResponse;
-import gdg.pium.domain.post.controller.dto.PostUpdateRequest;
+import gdg.pium.domain.post.dto.request.PostCreateRequest;
+import gdg.pium.domain.post.dto.response.PostInfoResponse;
+import gdg.pium.domain.post.dto.request.PostUpdateRequest;
 import gdg.pium.domain.post.service.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -24,45 +29,80 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createPost(
+    @Operation(
+            summary = "게시물 생성",
+            description = "게시물 생성 API 입니다.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "게시물 생성 성공"),
+            }
+    ) public ResponseDto<Void> createPost(
+            @Parameter(hidden = true) @UserId Long userId,
             @RequestPart("request") PostCreateRequest request,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) throws IOException {
-        Long userId = 1L;
         postService.createPost(request, images, userId);
+        return ResponseDto.created(null);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostInfoResponse> getPost(@PathVariable(name = "postId") Long postId) {
-        Long userId = 1L;
+    @Operation(
+            summary = "게시물 세부 조회",
+            description = "게시물 세부 조회용 API 입니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "게시물 세부 조회 성공"),
+            }
+    ) public ResponseDto<PostInfoResponse> getPost(
+            @Parameter(hidden = true) @UserId Long userId,
+            @PathVariable(name = "postId") Long postId
+    ) {
         PostInfoResponse response = postService.getPostById(postId, userId);
-        return ResponseEntity.ok(response);
+        return ResponseDto.ok(response);
     }
 
     @GetMapping("")
-    public ResponseEntity<PagingResponse<PostInfoResponse>> getPosts(
+    @Operation(
+            summary = "게시물 목록 조회",
+            description = "게시물 목록 조회용 API 입니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "게시물 목록 조회 성공"),
+            }
+    ) public ResponseDto<PagingResponse<PostInfoResponse>> getPosts(
+            @Parameter(hidden = true) @UserId Long userId,
             @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
-        Long userId = 1L;
         PagingResponse<PostInfoResponse> response = postService.getPosts(pageable, userId);
-        return ResponseEntity.ok(response);
+        return ResponseDto.ok(response);
     }
 
     @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updatePost(
+    @Operation(
+            summary = "게시물 수정",
+            description = "게시물 수정용 API 입니다.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "게시물 수정 성공"),
+            }
+    ) public ResponseDto<Void> updatePost(
+            @Parameter(hidden = true) @UserId Long userId,
             @PathVariable Long postId,
             @RequestPart("request") PostUpdateRequest request,
             @RequestPart(value = "newImages", required = false) List<MultipartFile> newImages
     ) throws IOException {
-        Long userId = 1L; // 현재 하드코딩, 실제 서비스에서는 인증 정보에서 가져와야 함.
         postService.updatePost(postId, request, newImages, userId);
-        return ResponseEntity.noContent().build();
+        return ResponseDto.noContent();
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
-        Long userId = 1L;
+    @Operation(
+            summary = "게시물 삭제",
+            description = "게시물 삭제용 API 입니다.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "테스트 성공 시 성공했다가 보내드릴게요!"),
+            }
+    ) public ResponseDto<Void> deletePost(
+            @Parameter(hidden = true) @UserId Long userId,
+            @PathVariable Long postId
+    ) {
         postService.deletePost(postId, userId);
-        return ResponseEntity.noContent().build();
+        return ResponseDto.noContent();
     }
 }

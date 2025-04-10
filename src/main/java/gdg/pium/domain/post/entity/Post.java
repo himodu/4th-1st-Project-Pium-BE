@@ -1,6 +1,6 @@
-package gdg.pium.domain.post;
+package gdg.pium.domain.post.entity;
 
-import gdg.pium.domain.user.User;
+import gdg.pium.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
