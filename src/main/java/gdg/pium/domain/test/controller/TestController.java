@@ -1,7 +1,7 @@
-package gdg.pium.domain.user.test.controller;
+package gdg.pium.domain.test.controller;
 
-import gdg.pium.domain.user.test.dto.TestResponse;
-import gdg.pium.domain.user.test.service.TestService;
+import gdg.pium.domain.test.dto.TestResponse;
+import gdg.pium.domain.test.service.TestService;
 import gdg.pium.global.annotation.UserId;
 import gdg.pium.global.common.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +17,7 @@ public class TestController {
 
     private final TestService testService;
 
+    @GetMapping("/test")
     @Operation(
             summary = "테스트 용",
             description = "jwt 인증 인가 테스트용 API 입니다.",
@@ -24,7 +25,6 @@ public class TestController {
                     @ApiResponse(responseCode = "200", description = "테스트 성공 시 성공했다가 보내드릴게요!"),
             }
     )
-    @GetMapping("/test")
     public ResponseDto<TestResponse> test(
             @Parameter(hidden = true) @UserId Long userId
     ) {

@@ -1,4 +1,4 @@
-package gdg.pium.domain.user.test.dto;
+package gdg.pium.domain.test.dto;
 
 public record TestResponse(
         String message

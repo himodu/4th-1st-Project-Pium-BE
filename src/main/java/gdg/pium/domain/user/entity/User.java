@@ -1,5 +1,6 @@
 package gdg.pium.domain.user.entity;
 
+import gdg.pium.domain.post.entity.Post;
 import gdg.pium.global.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -31,18 +32,22 @@ public class User {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false) // 기본 : DONATOR(인증 완료 시 수정)
+    @Column(nullable = false)
     private UserRole role;
 
     @Column(nullable = false)
     private String profileImageUrl;
 
+    @Column(nullable = false)
+    private Provider provider;
+
     @Builder
-    public User(String email, String password, String nickname, UserRole role, String profileImageUrl) {
+    public User(String email, String password, String nickname, UserRole role, String profileImageUrl, Provider provider) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
         this.profileImageUrl = profileImageUrl;
+        this.provider = provider;
     }
 }
