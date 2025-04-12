@@ -2,4 +2,11 @@ spring:
   application:
     name: pium
   profiles:
-    active: prod
+    active: local
+    group:
+      local:
+        - local
+      prod:
+        - prod
+      dev:
+        - dev
