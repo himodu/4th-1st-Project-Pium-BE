@@ -1,13 +1,14 @@
-package gdg.pium.global.auth.service;
+package gdg.pium.domain.auth.service;
 
+import gdg.pium.domain.auth.dto.kakao.KakaoTokenResponse;
+import gdg.pium.domain.auth.dto.kakao.KakaoUserInfo;
+import gdg.pium.domain.auth.dto.request.KakaoLoginRequest;
+import gdg.pium.domain.auth.dto.response.KakaoLoginResponse;
+import gdg.pium.domain.user.entity.Provider;
 import gdg.pium.domain.user.entity.User;
 import gdg.pium.domain.user.repository.UserRepository;
-import gdg.pium.global.auth.dto.request.KakaoLoginRequest;
-import gdg.pium.global.auth.repository.AuthRepository;
+import gdg.pium.domain.auth.repository.AuthRepository;
 import gdg.pium.global.enums.UserRole;
-import gdg.pium.global.auth.dto.kakao.KakaoTokenResponse;
-import gdg.pium.global.auth.dto.kakao.KakaoUserInfo;
-import gdg.pium.global.auth.dto.response.KakaoLoginResponse;
 import gdg.pium.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -144,6 +145,7 @@ public class OAuthService {
             .nickname(nickname)
             .profileImageUrl(profileImageUrl)
             .role(UserRole.USER) // default 계정 : 후원자
+            .provider(Provider.KAKAO)
             .build();
     }
 

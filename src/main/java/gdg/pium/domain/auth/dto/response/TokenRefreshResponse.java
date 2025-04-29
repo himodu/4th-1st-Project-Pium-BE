@@ -1,4 +1,4 @@
-package gdg.pium.global.auth.dto.response;
+package gdg.pium.domain.auth.dto.response;
 
 import lombok.Builder;
 import lombok.NonNull;

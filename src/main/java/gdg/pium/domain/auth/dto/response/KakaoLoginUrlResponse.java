@@ -1,4 +1,4 @@
-package gdg.pium.global.auth.dto.response;
+package gdg.pium.domain.auth.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

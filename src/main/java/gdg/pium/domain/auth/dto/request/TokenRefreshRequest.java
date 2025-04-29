@@ -1,4 +1,4 @@
-package gdg.pium.global.auth.dto.request;
+package gdg.pium.domain.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
