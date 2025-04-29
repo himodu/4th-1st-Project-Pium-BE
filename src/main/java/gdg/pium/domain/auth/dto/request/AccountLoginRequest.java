@@ -1,4 +1,4 @@
-package gdg.pium.global.auth.dto.request;
+package gdg.pium.domain.auth.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

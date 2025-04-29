@@ -1,4 +1,4 @@
-package gdg.pium.global.auth.dto.kakao;
+package gdg.pium.domain.auth.dto.kakao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

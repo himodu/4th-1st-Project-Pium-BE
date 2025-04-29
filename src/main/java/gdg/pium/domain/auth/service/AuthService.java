@@ -1,9 +1,9 @@
-package gdg.pium.global.auth.service;
+package gdg.pium.domain.auth.service;
 
-import gdg.pium.global.auth.dto.request.AccountLoginRequest;
-import gdg.pium.global.auth.dto.response.AccountLoginResponse;
-import gdg.pium.global.auth.dto.response.TokenRefreshResponse;
-import gdg.pium.global.auth.repository.AuthRepository;
+import gdg.pium.domain.auth.dto.request.AccountLoginRequest;
+import gdg.pium.domain.auth.dto.response.AccountLoginResponse;
+import gdg.pium.domain.auth.dto.response.TokenRefreshResponse;
+import gdg.pium.domain.auth.repository.AuthRepository;
 import gdg.pium.global.exception.CommonException;
 import gdg.pium.global.exception.ErrorCode;
 import gdg.pium.global.security.CustomUserDetails;

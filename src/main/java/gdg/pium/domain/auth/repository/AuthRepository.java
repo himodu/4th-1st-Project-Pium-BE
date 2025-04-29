@@ -1,4 +1,4 @@
-package gdg.pium.global.auth.repository;
+package gdg.pium.domain.auth.repository;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package gdg.pium.global.auth.dto.response;
+package gdg.pium.domain.auth.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

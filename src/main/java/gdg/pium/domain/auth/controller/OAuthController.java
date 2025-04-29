@@ -1,14 +1,13 @@
-package gdg.pium.global.auth.controller;
+package gdg.pium.domain.auth.controller;
 
-import gdg.pium.global.auth.dto.request.KakaoLoginRequest;
-import gdg.pium.global.auth.dto.response.KakaoLoginResponse;
-import gdg.pium.global.auth.dto.response.KakaoLoginUrlResponse;
-import gdg.pium.global.auth.service.OAuthService;
+import gdg.pium.domain.auth.dto.request.KakaoLoginRequest;
+import gdg.pium.domain.auth.dto.response.KakaoLoginResponse;
+import gdg.pium.domain.auth.dto.response.KakaoLoginUrlResponse;
+import gdg.pium.domain.auth.service.OAuthService;
 import gdg.pium.global.common.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

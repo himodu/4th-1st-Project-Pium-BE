@@ -1,6 +1,6 @@
-package gdg.pium.global.auth.repository.impl;
+package gdg.pium.domain.auth.repository.impl;
 
-import gdg.pium.global.auth.repository.AuthRepository;
+import gdg.pium.domain.auth.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
