@@ -37,10 +37,10 @@ public class OAuthController {
         summary = "[공통] 카카오 로그인 후 사용자 등록 및 jwt 발급",
         description = "accessToken 을 받아 카카오 서버로 부터 사용자 정보를 받고 그 정보를 DB에 등록한 뒤 jwt 발급",
         responses = {
-            @ApiResponse(responseCode = "200", description = "isNewUser는 신규 회원인지의 여부. 신규 회원이라면 음식점|후원자|결식아동 중 하나를 선택하라는 화면으로 이동."),
+            @ApiResponse(responseCode = "200")
         }
     )
-    @GetMapping("/kakao/login")
+    @PostMapping("/kakao/login")
     public ResponseDto<KakaoLoginResponse> kakaoCallback(
             @RequestBody KakaoLoginRequest request
     ) {
