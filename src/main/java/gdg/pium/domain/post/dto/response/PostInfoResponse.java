@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 public class PostInfoResponse {
 
+    private Long postId;
     private String title;
     private String content;
     private String nickname;
@@ -21,6 +22,7 @@ public class PostInfoResponse {
 
     public static PostInfoResponse from(Post post, User user, List<String> images) {
         return PostInfoResponse.builder()
+                .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .nickname(user.getNickname())
