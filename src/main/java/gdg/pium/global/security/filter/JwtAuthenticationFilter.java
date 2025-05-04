@@ -1,6 +1,7 @@
 package gdg.pium.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gdg.pium.global.constant.Constants;
 import gdg.pium.global.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -47,5 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         );
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return Constants.NO_NEED_AUTH_URLS.contains(request.getRequestURI());
     }
 }

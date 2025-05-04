@@ -8,9 +8,11 @@ public class Constants {
     public static String USER_ROLE_CLAIM_NAME = "rol";
 
     public static List<String> NO_NEED_AUTH_URLS = List.of(
+            "/api/v1/auth/signup",
             "/api/v1/auth/login",
-            "/api/v1/auth/logout",
             "/api/v1/auth/token/refresh",
-            "/api/v1/oauth/**"
+            "/api/v1/oauth/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     );
 }

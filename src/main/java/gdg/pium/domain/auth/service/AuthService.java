@@ -1,9 +1,14 @@
 package gdg.pium.domain.auth.service;
 
-import gdg.pium.domain.auth.dto.request.AccountLoginRequest;
+import gdg.pium.domain.auth.dto.request.UserLoginRequest;
+import gdg.pium.domain.auth.dto.request.UserSignupRequest;
 import gdg.pium.domain.auth.dto.response.AccountLoginResponse;
 import gdg.pium.domain.auth.dto.response.TokenRefreshResponse;
 import gdg.pium.domain.auth.repository.AuthRepository;
+import gdg.pium.domain.user.entity.Provider;
+import gdg.pium.domain.user.entity.User;
+import gdg.pium.domain.user.repository.UserRepository;
+import gdg.pium.global.enums.UserRole;
 import gdg.pium.global.exception.CommonException;
 import gdg.pium.global.exception.ErrorCode;
 import gdg.pium.global.security.CustomUserDetails;
@@ -15,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +33,25 @@ public class AuthService{
     private final AuthRepository authRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    public AccountLoginResponse login(AccountLoginRequest loginRequestDto) {
+    public void signup(UserSignupRequest request) {
+        userRepository.save(
+                User.builder()
+                        .email(request.email())
+                        .password(passwordEncoder.encode(request.password()))
+                        .nickname(request.nickname())
+                        .profileImageUrl(request.profileImageLink())
+                        .role(UserRole.USER)
+                        .provider(Provider.KAKAO)
+                        .build()
+                );
+    }
+
+    public AccountLoginResponse login(UserLoginRequest loginRequestDto) {
+        System.out.println(loginRequestDto.password());
+
         // 인증
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
