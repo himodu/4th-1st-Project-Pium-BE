@@ -1,7 +1,8 @@
 package gdg.pium.domain.auth.controller;
 
-import gdg.pium.domain.auth.dto.request.AccountLoginRequest;
+import gdg.pium.domain.auth.dto.request.UserLoginRequest;
 import gdg.pium.domain.auth.dto.request.TokenRefreshRequest;
+import gdg.pium.domain.auth.dto.request.UserSignupRequest;
 import gdg.pium.domain.auth.dto.response.AccountLoginResponse;
 import gdg.pium.domain.auth.dto.response.TokenRefreshResponse;
 import gdg.pium.domain.auth.service.AuthService;
@@ -25,6 +26,22 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(
+            summary = "[공통] 사용자 회원가입",
+            description = "테스트 용 사용자 일반 회원가입",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "회원 정보 저장됨"),
+            }
+    )
+    @PostMapping("/signup")
+    public ResponseDto<Void> signup(
+       @Valid @RequestBody UserSignupRequest userSignupRequest
+    ) {
+        authService.signup(userSignupRequest);
+        return ResponseDto.created(null);
+    }
+
+
+    @Operation(
         summary = "[공통] 사용자 로그인",
         description = "Access Token은 매 요청시 Authorization 헤더에 `Bearer {ACCESS_TOKEN}`형식으로 넣어주세요. Refresh Token은 auth/token/refresh 요청 시 필요합니다",
         responses = {
@@ -33,7 +50,7 @@ public class AuthController {
     )
     @PostMapping("/login")
     public ResponseDto<AccountLoginResponse> login(
-        @Valid @RequestBody AccountLoginRequest loginRequestDto
+        @Valid @RequestBody UserLoginRequest loginRequestDto
     ) {
         return ResponseDto.ok(
             authService.login(loginRequestDto)
