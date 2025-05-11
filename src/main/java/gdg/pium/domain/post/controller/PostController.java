@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/post")
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
     private final PostService postService;
@@ -68,7 +68,7 @@ public class PostController {
             }
     ) public ResponseDto<PagingResponse<PostInfoResponse>> getPosts(
             @Parameter(hidden = true) @UserId Long userId,
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            @PageableDefault(page = 0, size = 50) Pageable pageable
     ) {
         PagingResponse<PostInfoResponse> response = postService.getPosts(pageable, userId);
         return ResponseDto.ok(response);
@@ -96,7 +96,7 @@ public class PostController {
             summary = "게시물 삭제",
             description = "게시물 삭제용 API 입니다.",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "테스트 성공 시 성공했다가 보내드릴게요!"),
+                    @ApiResponse(responseCode = "204", description = "테스트 성공 시 성공했다고 보내드릴게요!"),
             }
     ) public ResponseDto<Void> deletePost(
             @Parameter(hidden = true) @UserId Long userId,
