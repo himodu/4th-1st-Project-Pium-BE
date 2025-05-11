@@ -17,4 +17,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
             "   OR LOWER(d.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "   OR LOWER(l.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Place> findPlacesByKeyword(@Param("keyword") String keyword);
+
+    @Query("SELECT p FROM Place p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<Place> findPlacesByNameKeyword(@Param("keyword") String keyword);
 }
