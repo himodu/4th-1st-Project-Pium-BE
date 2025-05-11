@@ -42,15 +42,22 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceSearchRelationResponse> searchPlaceRelations(String keyword) {
+    public List<PlaceSearchRelationResponse> searchPlaceRelations(String keyword, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
+
         List<Place> places = placeRepository.findPlacesByNameKeyword(keyword);
+
         return places.stream()
                 .map(PlaceSearchRelationResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public PlaceSearchResponse getPlace(Long placeId) {
+    public PlaceSearchResponse getPlace(Long placeId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
+
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_POST));
 

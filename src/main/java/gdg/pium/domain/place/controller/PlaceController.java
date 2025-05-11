@@ -27,14 +27,18 @@ public class PlaceController {
     }
 
     @GetMapping("/search/relation")
-    public ResponseDto<List<PlaceSearchRelationResponse>> searchPlaceRelations(@RequestParam String keyword) {
-        List<PlaceSearchRelationResponse> response = placeService.searchPlaceRelations(keyword);
+    public ResponseDto<List<PlaceSearchRelationResponse>> searchPlaceRelations(
+            @Parameter(hidden = true) @UserId Long userId,
+            @RequestParam String keyword) {
+        List<PlaceSearchRelationResponse> response = placeService.searchPlaceRelations(keyword, userId);
         return ResponseDto.ok(response);
     }
 
     @GetMapping("/{placeId}")
-    public ResponseDto<PlaceSearchResponse> getPlaceDetail(@PathVariable Long placeId) {
-        PlaceSearchResponse response = placeService.getPlace(placeId);
+    public ResponseDto<PlaceSearchResponse> getPlaceDetail(
+            @Parameter(hidden = true) @UserId Long userId,
+            @PathVariable Long placeId) {
+        PlaceSearchResponse response = placeService.getPlace(placeId, userId);
         return ResponseDto.ok(response);
     }
 }
