@@ -13,6 +13,7 @@ public enum ErrorCode {
     NOT_FOUND_USER(40401, HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
     NOT_FOUND_POST(40402, HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
     NOT_FOUND_LIKE(40403, HttpStatus.NOT_FOUND, "존재하지 않는 좋아요입니다."),
+    NOT_FOUND_PLACE(40403, HttpStatus.NOT_FOUND, "존재하지 않는 건물입니다."),
 
     // Invalid Argument Error
     INVALID_HEADER_ERROR(40000, HttpStatus.BAD_REQUEST, "유효하지 않은 헤더입니다."),
