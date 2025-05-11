@@ -1,16 +1,20 @@
 package gdg.pium.domain.post.entity;
 
+import gdg.pium.domain.like.entity.Like;
 import gdg.pium.domain.user.entity.User;
+import gdg.pium.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Builder
-@Getter
-@AllArgsConstructor
-public class Post {
+import java.util.List;
 
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
+@Table(name = "posts")
+public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,11 +27,12 @@ public class Post {
 
     private float longitude;
 
-    private int likes;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes;
 
     public void update(String title, String content) {
         if (title != null && !title.isBlank()) {

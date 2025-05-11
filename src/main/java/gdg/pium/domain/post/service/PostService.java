@@ -1,5 +1,7 @@
 package gdg.pium.domain.post.service;
 
+import gdg.pium.domain.like.entity.Like;
+import gdg.pium.domain.like.repository.LikeRepository;
 import gdg.pium.domain.user.entity.User;
 import gdg.pium.global.dto.PagingResponse;
 import gdg.pium.domain.image.entity.Image;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +37,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final ImageService imageService;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public void createPost(PostCreateRequest request, List<MultipartFile> images, Long userId) throws IOException {
@@ -58,8 +62,9 @@ public class PostService {
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_POST));
 
         List<String> imageUrls = imageRepository.findByPostId(postId);
+        Boolean liked = post.getLikes().stream().anyMatch(like -> like.getUser().getId().equals(userId));
 
-        return PostInfoResponse.from(post, user, imageUrls);
+        return PostInfoResponse.of(post, user, imageUrls, liked);
     }
 
     @Transactional(readOnly = true)
@@ -69,6 +74,24 @@ public class PostService {
 
         Page<Post> postPage = postRepository.findAll(pageable);
 
+        System.out.println(postPage.getContent().size());
+
+        List<LikeRepository.PostLikeCount> postLikeCounts = likeRepository.findPostLikeCountInPosts(postPage.getContent());
+        Map<Long, Integer> postLikeCntMap = postLikeCounts.stream().collect(
+                Collectors.toMap(
+                        LikeRepository.PostLikeCount::getPostId,
+                        LikeRepository.PostLikeCount::getCount
+                )
+        );
+
+        List<Long> postLikeExistIds = likeRepository.findPostLikeExistsByUserAndPosts(user, postPage.getContent());
+        Map<Long, Boolean> postLikeExistMap = postLikeExistIds.stream().collect(
+                Collectors.toMap(
+                        postId -> postId,
+                        postId -> true
+                )
+        );
+
         Page<PostInfoResponse> responsePage = postPage.map(post -> {
             // 게시글 작성자
             User writer = userRepository.findById(post.getUser().getId())
@@ -77,7 +100,7 @@ public class PostService {
             // 이미지 URL 조회
             List<String> imageUrls = imageRepository.findByPostId(post.getId());
 
-            return PostInfoResponse.from(post, writer, imageUrls);
+            return PostInfoResponse.of(post, writer, imageUrls, postLikeCntMap.get(post.getId()), postLikeExistMap.get(post.getId()));
         });
 
 
