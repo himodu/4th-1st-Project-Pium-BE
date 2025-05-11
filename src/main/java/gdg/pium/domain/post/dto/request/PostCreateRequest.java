@@ -19,7 +19,6 @@ public class PostCreateRequest {
                 .latitude(latitude)
                 .longitude(longitude)
                 .user(user)
-                .likes(0)
                 .build();
     }
 }
