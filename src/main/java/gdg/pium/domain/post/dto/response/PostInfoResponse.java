@@ -28,8 +28,8 @@ public class PostInfoResponse {
     public static PostInfoResponse of(Post post, User user, List<String> images, Boolean liked) {
         return PostInfoResponse.builder()
                 .postId(post.getId())
-                .userName(user.getNickname())
-                .userProfileImageUrl(user.getProfileImageUrl())
+                .userName(post.getUser().getNickname())
+                .userProfileImageUrl(post.getUser().getProfileImageUrl())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .nickname(user.getNickname())
